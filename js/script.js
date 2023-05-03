@@ -54,7 +54,3 @@ cBtn.addEventListener('click', () => {
 deleteBtn.addEventListener('click', () => {
 	outputParagraph.textContent = outputParagraph.textContent.slice(0, -1);
 });
-
-divide1xBtn.addEventListener('click', () => {
-	outputParagraph.textContent = 1 / outputParagraph.textContent;
-});
