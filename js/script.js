@@ -9,38 +9,38 @@ const numb6 = document.getElementById('6');
 const numb1 = document.getElementById('1');
 const numb2 = document.getElementById('2');
 const numb3 = document.getElementById('3');
-const ceBtn = document.getElementById('CE'); // const CE
-const cBtn = document.getElementById('C'); // const C
-const deleteBtn = document.getElementById('delete'); // const delete
-const divide1xBtn = document.getElementById('divide1x'); // const divide1x
+const ceBtn = document.getElementById('CE');
+const cBtn = document.getElementById('C');
+const deleteBtn = document.getElementById('delete');
+const divide1xBtn = document.getElementById('divide1x');
+const superScript = document.getElementById('superScript');
+const sqrt = document.getElementById('sqrt');
+const divide = document.getElementById('divide');
+const multiplication = document.getElementById('multiplication');
+const minus = document.getElementById('minus');
+const plus = document.getElementById('plus');
+const plusMinus = document.getElementById('plusMinus');
+const comma = document.getElementById('comma');
+const sum = document.getElementById('sum');
+let isTrue = true;
 
-numb7.addEventListener('click', () => {
-	outputParagraph.textContent += '7';
-});
-numb8.addEventListener('click', () => {
-	outputParagraph.textContent += '8';
-});
-numb9.addEventListener('click', () => {
-	outputParagraph.textContent += '9';
-});
-numb4.addEventListener('click', () => {
-	outputParagraph.textContent += '4';
-});
-numb5.addEventListener('click', () => {
-	outputParagraph.textContent += '5';
-});
-numb6.addEventListener('click', () => {
-	outputParagraph.textContent += '6';
-});
-numb1.addEventListener('click', () => {
-	outputParagraph.textContent += '1';
-});
-numb2.addEventListener('click', () => {
-	outputParagraph.textContent += '2';
-});
-numb3.addEventListener('click', () => {
-	outputParagraph.textContent += '3';
-});
+function clearOutput(x) {
+	if (isTrue) {
+		outputParagraph.textContent = '';
+		inputParagraph.textContent = '';
+		isTrue = false;
+	}
+	outputParagraph.textContent += x;
+}
+
+function containsComma(x) {
+	let y;
+	if (x.includes(',')) {
+		y = x.replace(',', '.');
+	} else {
+		y = x;
+	}
+}
 
 ceBtn.addEventListener('click', () => {
 	outputParagraph.textContent = '';
@@ -53,4 +53,44 @@ cBtn.addEventListener('click', () => {
 
 deleteBtn.addEventListener('click', () => {
 	outputParagraph.textContent = outputParagraph.textContent.slice(0, -1);
+});
+
+plus.addEventListener('click', () => {
+	const value1 = outputParagraph.textContent;
+	inputParagraph.textContent = `${value1} +`;
+	outputParagraph.textContent = ``;
+
+	sum.addEventListener('click', () => {
+		const value2 = outputParagraph.textContent;
+		fetch(`php/plus.php?value1=${value1}&value2=${value2}`).then(
+			async (result) => {
+				document.querySelector('.calculator__content-output-p').innerHTML =
+					await result.text();
+			}
+		);
+		inputParagraph.textContent = `${value1} + ${value2} =`;
+		isTrue = true;
+	});
+});
+
+minus.addEventListener('click', () => {
+	const value1 = outputParagraph.textContent;
+	inputParagraph.textContent = `${value1} -`;
+	outputParagraph.textContent = ``;
+
+	sum.addEventListener('click', () => {
+		const value2 = outputParagraph.textContent;
+		fetch(`php/minus.php?value1=${value1}&value2=${value2}`).then(
+			async (result) => {
+				document.querySelector('.calculator__content-output-p').innerHTML =
+					await result.text();
+			}
+		);
+		inputParagraph.textContent = `${value1} - ${value2} =`;
+		isTrue = true;
+	});
+});
+
+comma.addEventListener('click', () => {
+	outputParagraph.textContent += '.';
 });
