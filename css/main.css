@@ -31,6 +31,7 @@ body {
   grid-template-rows: repeat(3, 1fr);
 }
 .calculator__items {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(6, 1fr);
@@ -138,4 +139,18 @@ body {
 }
 .calculator__content-memory-btn:hover {
   background-color: rgb(50, 50, 50);
+}
+.calculator__content-memory-btn-MC, .calculator__content-memory-btn-MR, .calculator__content-memory-btn-MS, .calculator__content-memory-btn-M {
+  color: rgb(95, 95, 95);
+}
+.calculator__history {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-color: rgb(50, 50, 50);
+  z-index: 99;
+  visibility: hidden;
+}
+.calculator .visible {
+  visibility: visible;
 }/*# sourceMappingURL=main.css.map */
