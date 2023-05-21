@@ -77,12 +77,18 @@ function ce() {
 ceBtn.addEventListener('click', () => {
     outputParagraph.textContent = '0';
     isTrueOutput = true;
+
+    firstValue = undefined;
+    secondValue = undefined;
 });
 
 cBtn.addEventListener('click', () => {
     inputParagraph.textContent = '';
     outputParagraph.textContent = '0';
     isTrueOutput = true;
+
+    firstValue = undefined;
+    secondValue = undefined;
 });
 
 deleteBtn.addEventListener('click', () => {
