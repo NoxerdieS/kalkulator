@@ -1,0 +1,10 @@
+version: '3.9'
+
+services:
+  app:
+    container_name: mati-php-test
+    image: php:8.2-apache
+    ports:
+      - "80:80"
+    volumes:
+      - .:/var/www/html
