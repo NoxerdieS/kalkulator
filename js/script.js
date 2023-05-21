@@ -1,10 +1,16 @@
 const inputParagraph = document.getElementById('calculator__content-input-p');
 const outputParagraph = document.getElementById('calculator__content-output-p');
+/** @var {HTMLElement} Memory C button */
 const MC = document.getElementById('MC');
+/** @var {HTMLElement} Memory R button */
 const MR = document.getElementById('MR');
+/** @var {HTMLElement} Memory S button */
 const MS = document.getElementById('MS');
+/** @var {HTMLElement} Memory + button */
 const MPlus = document.getElementById('Mplus');
+/** @var {HTMLElement} Memory down arrow button */
 const M = document.getElementById('M');
+/** @var {HTMLElement} Memory - button */
 const MMinus = document.getElementById('Mminus');
 const percentBtn = document.getElementById('percent');
 const ceBtn = document.getElementById('CE');
@@ -19,11 +25,12 @@ const minus = document.getElementById('minus');
 const plus = document.getElementById('plus');
 const plusMinus = document.getElementById('plusMinus');
 const comma = document.getElementById('comma');
-const sum = document.getElementById('sum');
+let sum = document.getElementById('sum');
+/** @var {HTMLElement} History panel, associated with memory down arrow button */
 const historyDisplay = document.getElementById('history-display');
 let isTrueOutput = true;
 let isTrueInput = false;
-let isTrueC = false;
+// let isTrueC = false;
 let memory = 0;
 let memoryMS = 0;
 
@@ -88,6 +95,15 @@ deleteBtn.addEventListener('click', () => {
 	}
 });
 
+/**
+ * Function for unbugging sum button.
+ */
+const resetSumButton = () => {
+	const newSumButton = sum.cloneNode(true);
+	sum.replaceWith(newSumButton);
+	sum = newSumButton;
+}
+
 let value1Plus;
 let value2Plus;
 plus.addEventListener('click', () => {
@@ -100,6 +116,7 @@ plus.addEventListener('click', () => {
 	outputParagraph.textContent = `0`;
 	isZero(outputParagraph.textContent);
 
+	resetSumButton()
 	sum.addEventListener('click', () => {
 		value2Plus = outputParagraph.textContent;
 		inputParagraph.textContent = `${value1Plus} + ${value2Plus} =`;
@@ -122,14 +139,13 @@ plus.addEventListener('click', () => {
 let value1Minus;
 let value2Minus;
 minus.addEventListener('click', () => {
-	sum.removeEventListener('click', () => {});
 	isTrueInput = false;
 	value1Minus = outputParagraph.textContent;
 	inputParagraph.textContent = `${value1Minus} -`;
 	value1Minus = containsComma(value1Minus);
 	outputParagraph.textContent = `0`;
 	isZero(outputParagraph.textContent);
-
+	resetSumButton()
 	sum.addEventListener('click', () => {
 		value2Minus = outputParagraph.textContent;
 		value2Minus = containsComma(value2Minus);
@@ -149,7 +165,6 @@ minus.addEventListener('click', () => {
 });
 
 multiplication.addEventListener('click', () => {
-	sum.removeEventListener('click', () => {});
 	let value1Multiplication;
 	let value2Multiplication;
 	isTrueInput = false;
@@ -159,6 +174,7 @@ multiplication.addEventListener('click', () => {
 	outputParagraph.textContent = `0`;
 	isZero(outputParagraph.textContent);
 
+	resetSumButton()
 	sum.addEventListener('click', () => {
 		value2Multiplication = outputParagraph.textContent;
 		value2Multiplication = containsComma(value2Multiplication);
@@ -178,7 +194,6 @@ multiplication.addEventListener('click', () => {
 });
 
 divide.addEventListener('click', () => {
-	sum.removeEventListener('click', () => {});
 	let value1Divide;
 	let value2Divide;
 	isTrueInput = false;
@@ -187,6 +202,8 @@ divide.addEventListener('click', () => {
 	value1Divide = containsComma(value1Divide);
 	outputParagraph.textContent = `0`;
 	isZero(outputParagraph.textContent);
+
+	resetSumButton()
 	sum.addEventListener('click', () => {
 		value2Divide = outputParagraph.textContent;
 		value2Divide = containsComma(value2Divide);
