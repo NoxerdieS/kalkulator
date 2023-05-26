@@ -1,10 +1,14 @@
 <?php
-    (float)$value1 = $_GET["value1Multiplication"];
-    (float)$value2 = $_GET["value2Multiplication"];
+    $value1 = (float)$_GET["value1Multiplication"];
+    $value2 = (float)$_GET["value2Multiplication"];
 
-    (float)$value3 = $value1 * $value2;
-    
-    echo $value3;
-    $value1 = null;
-    $value2 = null;
+    if ($_GET["value1Multiplication"] == "undefined" || $_GET["value2Multiplication"] == "undefined")  {
+        echo "Error";
+    } else {
+        (float)$value3 = $value1 * $value2;
+        
+        echo $value3;
+        $value1 = null;
+        $value2 = null;
+    }
 ?>

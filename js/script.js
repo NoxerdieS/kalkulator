@@ -69,21 +69,31 @@ function blockDelete() {
 }
 
 function containsComma(x) {
-	return x.replace(',', '.');
+	if (x != undefined && x != null) {
+		return x.replace(',', '.');
+	} else {
+		return x;
+	}
 }
+
+// function addSpace(x) {
+// 	if (outputParagraph.textContent > 3) {
+// 		outputParagraph.textContent += ' ';
+// 	}
+// }
+// addSpace();
 
 function ce() {
 	inputParagraph.textContent = '';
 	outputParagraph.textContent = '0';
 	isTrueOutput = true;
+
+	memoryAdd = [null, null];
 }
 
 ceBtn.addEventListener('click', () => {
 	outputParagraph.textContent = '0';
 	isTrueOutput = true;
-
-	firstValue = undefined;
-	secondValue = undefined;
 });
 
 cBtn.addEventListener('click', () => {
@@ -93,6 +103,7 @@ cBtn.addEventListener('click', () => {
 
 	firstValue = undefined;
 	secondValue = undefined;
+	memoryAdd = [null, null];
 });
 
 deleteBtn.addEventListener('click', () => {
@@ -111,8 +122,20 @@ const resetSumButton = () => {
 	sum = newSumButton;
 };
 
+function memoryOperation() {
+	if (memoryAdd[0] !== null && memoryAdd[1] !== null) {
+		secondValue = memoryAdd[1];
+		firstValue = memoryAdd[0];
+	} else {
+		secondValue = outputParagraph.textContent;
+		memoryAdd[1] = secondValue;
+	}
+}
+
 let firstValue;
 let secondValue;
+
+let memoryAdd = [null, null];
 
 percentBtn.addEventListener('click', () => {
 	if (firstValue !== undefined && secondValue !== undefined) {
@@ -126,126 +149,149 @@ percentBtn.addEventListener('click', () => {
 });
 
 plus.addEventListener('click', () => {
+	memoryAdd = [null, null];
 	isTrueInput = false;
 	firstValue = outputParagraph.textContent;
 	inputParagraph.textContent = `${firstValue} +`;
-	firstValue = containsComma(firstValue);
 	outputParagraph.textContent = `0`;
 	isZero(outputParagraph.textContent);
 
 	resetSumButton();
 	sum.addEventListener('click', () => {
-		secondValue = outputParagraph.textContent;
-		inputParagraph.textContent = `${firstValue} + ${secondValue} =`;
+		memoryOperation();
+		firstValue = containsComma(firstValue);
 		secondValue = containsComma(secondValue);
-		console.log(firstValue, secondValue);
 		fetch(
 			`php/plus.php?value1Plus=${firstValue}&value2Plus=${secondValue}`
 		).then(async (result) => {
 			outputParagraph.innerHTML = (await result.text()).replace('.', ',');
+			if (outputParagraph.innerHTML == 'Error') {
+				inputParagraph.innerHTML = '';
+				outputParagraph.innerHTML = '0';
+			} else {
+				inputParagraph.textContent =
+					`${firstValue} + ${secondValue} =`.replaceAll('.', ',');
+				memoryAdd[0] = outputParagraph.textContent;
+			}
+			isTrueOutput = true;
+			isTrueInput = true;
+			ceBtn.addEventListener('click', ce);
+			firstValue = undefined;
+			secondValue = undefined;
 		});
-		isTrueOutput = true;
-		isTrueInput = true;
-		ceBtn.addEventListener('click', ce);
-
-		firstValue = undefined;
-		secondValue = undefined;
 	});
 });
 
 minus.addEventListener('click', () => {
+	memoryAdd = [null, null];
 	isTrueInput = false;
 	firstValue = outputParagraph.textContent;
 	inputParagraph.textContent = `${firstValue} -`;
-	firstValue = containsComma(firstValue);
 	outputParagraph.textContent = `0`;
 	isZero(outputParagraph.textContent);
+
 	resetSumButton();
 	sum.addEventListener('click', () => {
-		secondValue = outputParagraph.textContent;
+		memoryOperation();
+		firstValue = containsComma(firstValue);
 		secondValue = containsComma(secondValue);
 		fetch(
 			`php/minus.php?value1Minus=${firstValue}&value2Minus=${secondValue}`
 		).then(async (result) => {
 			outputParagraph.innerHTML = (await result.text()).replace('.', ',');
+			if (outputParagraph.innerHTML == 'Error') {
+				inputParagraph.innerHTML = '';
+				outputParagraph.innerHTML = '0';
+			} else {
+				inputParagraph.textContent =
+					`${firstValue} - ${secondValue} =`.replaceAll('.', ',');
+				memoryAdd[0] = outputParagraph.textContent;
+			}
+			isTrueOutput = true;
+			isTrueInput = true;
+			ceBtn.addEventListener('click', ce);
+			firstValue = undefined;
+			secondValue = undefined;
 		});
-		inputParagraph.textContent = `${firstValue} - ${secondValue} =`;
-		isTrueOutput = true;
-		isTrueInput = true;
-		ceBtn.addEventListener('click', ce);
-
-		firstValue = undefined;
-		secondValue = undefined;
 	});
 });
-
 multiplication.addEventListener('click', () => {
+	memoryAdd = [null, null];
 	isTrueInput = false;
 	firstValue = outputParagraph.textContent;
 	inputParagraph.textContent = `${firstValue} x`;
-	firstValue = containsComma(firstValue);
 	outputParagraph.textContent = `0`;
 	isZero(outputParagraph.textContent);
 
 	resetSumButton();
 	sum.addEventListener('click', () => {
-		secondValue = outputParagraph.textContent;
+		memoryOperation();
+		firstValue = containsComma(firstValue);
 		secondValue = containsComma(secondValue);
 		fetch(
 			`php/multiplication.php?value1Multiplication=${firstValue}&value2Multiplication=${secondValue}`
 		).then(async (result) => {
 			outputParagraph.innerHTML = (await result.text()).replace('.', ',');
+			if (outputParagraph.innerHTML == 'Error') {
+				inputParagraph.innerHTML = '';
+				outputParagraph.innerHTML = '0';
+			} else {
+				inputParagraph.textContent =
+					`${firstValue} x ${secondValue} =`.replaceAll('.', ',');
+				memoryAdd[0] = outputParagraph.textContent;
+			}
+			isTrueOutput = true;
+			isTrueInput = true;
+			ceBtn.addEventListener('click', ce);
+			firstValue = undefined;
+			secondValue = undefined;
 		});
-		inputParagraph.textContent = `${firstValue} x ${secondValue} =`;
-		isTrueOutput = true;
-		isTrueInput = true;
-		ceBtn.addEventListener('click', ce);
-
-		firstValue = undefined;
-		secondValue = undefined;
 	});
 });
 
 divide.addEventListener('click', () => {
+	memoryAdd = [null, null];
 	isTrueInput = false;
 	firstValue = outputParagraph.textContent;
 	inputParagraph.textContent = `${firstValue} ÷`;
-	firstValue = containsComma(firstValue);
 	outputParagraph.textContent = `0`;
 	isZero(outputParagraph.textContent);
 
 	resetSumButton();
 	sum.addEventListener('click', () => {
-		secondValue = outputParagraph.textContent;
+		memoryOperation();
+		firstValue = containsComma(firstValue);
 		secondValue = containsComma(secondValue);
 		fetch(
 			`php/divide.php?value1Divide=${firstValue}&value2Divide=${secondValue}`
 		).then(async (result) => {
 			outputParagraph.innerHTML = (await result.text()).replace('.', ',');
+			if (outputParagraph.innerHTML == 'Error') {
+				inputParagraph.innerHTML = '';
+				outputParagraph.innerHTML = '0';
+			} else {
+				inputParagraph.textContent =
+					`${firstValue} ÷ ${secondValue} =`.replaceAll('.', ',');
+				memoryAdd[0] = outputParagraph.textContent;
+			}
+			isTrueOutput = true;
+			isTrueInput = true;
+			ceBtn.addEventListener('click', ce);
+			firstValue = undefined;
+			secondValue = undefined;
 		});
-		inputParagraph.textContent = `${firstValue} ÷ ${secondValue} =`;
-		isTrueOutput = true;
-		isTrueInput = true;
-		ceBtn.addEventListener('click', ce);
-
-		firstValue = undefined;
-		secondValue = undefined;
 	});
 });
 
 sqrt.addEventListener('click', () => {
-	let value1Sqrt;
 	isTrueInput = false;
-	value1Sqrt = outputParagraph.textContent;
-	inputParagraph.textContent = `√(${value1Sqrt})`;
-	value1Sqrt = containsComma(value1Sqrt);
-	fetch(`php/sqrt.php?value1Sqrt=${value1Sqrt}`).then(async (result) => {
-		document.querySelector('.calculator__content-output-p').innerHTML = (
-			await result.text()
-		).replace('.', ',');
+	firstValue = outputParagraph.textContent;
+	inputParagraph.textContent = `√(${firstValue})`;
+	firstValue = containsComma(firstValue);
+	fetch(`php/sqrt.php?value1Sqrt=${firstValue}`).then(async (result) => {
+		outputParagraph.innerHTML = (await result.text()).replace('.', ',');
 	});
 	isTrueOutput = true;
-
 	firstValue = undefined;
 	secondValue = undefined;
 });
@@ -256,11 +302,8 @@ pow.addEventListener('click', () => {
 	inputParagraph.textContent = `sqr(${firstValue})`;
 	firstValue = containsComma(firstValue);
 	fetch(`php/pow.php?value1Pow=${firstValue}`).then(async (result) => {
-		document.querySelector('.calculator__content-output-p').innerHTML = (
-			await result.text()
-		).replace('.', ',');
+		outputParagraph.innerHTML = (await result.text()).replace('.', ',');
 	});
-
 	isTrueOutput = true;
 	firstValue = undefined;
 	secondValue = undefined;
@@ -271,15 +314,13 @@ divide1xBtn.addEventListener('click', () => {
 	firstValue = 1;
 	inputParagraph.textContent = `1/(${outputParagraph.textContent})`;
 	secondValue = outputParagraph.textContent;
+	secondValue = containsComma(secondValue);
 	fetch(
 		`php/divide1x.php?value1Divide1x=${firstValue}&value2Divide1x=${secondValue}`
 	).then(async (result) => {
-		document.querySelector('.calculator__content-output-p').innerHTML = (
-			await result.text()
-		).replace('.', ',');
+		outputParagraph.innerHTML = (await result.text()).replace('.', ',');
 	});
 	isTrueOutput = true;
-
 	firstValue = undefined;
 	secondValue = undefined;
 });

@@ -156,9 +156,11 @@ body {
   z-index: 99;
   visibility: hidden;
 }
-.calculator__history-element {
+.calculator__history li {
   color: white;
   font-size: 2rem;
+  list-style: none;
+  margin: 10px;
 }
 .calculator .visible {
   visibility: visible;

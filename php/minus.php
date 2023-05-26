@@ -1,10 +1,14 @@
 <?php
-    (float)$value1 = $_GET["value1Minus"];
-    (float)$value2 = $_GET["value2Minus"];
+    $value1 = (float)$_GET["value1Minus"];
+    $value2 = (float)$_GET["value2Minus"];
 
-    (float)$value3 = $value1 - $value2;
-    
-    echo $value3;
-    $value1 = null;
-    $value2 = null;
+    if ($_GET["value1Minus"] == "undefined" || $_GET["value2Minus"] == "undefined")  {
+        echo "Error";
+    } else {
+        (float)$value3 = $value1 - $value2;
+        
+        echo $value3;
+        $value1 = null;
+        $value2 = null;
+    }
 ?>

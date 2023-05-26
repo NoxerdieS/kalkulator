@@ -1,8 +1,14 @@
 <?php
-    (float)$value1 = $_GET["value1Divide1x"];
-    (float)$value2 = $_GET["value2Divide1x"];
+    $value1 = (float)$_GET["value1Divide1x"];
+    $value2 = (float)$_GET["value2Divide1x"];
 
-    (float)$value3 = $value1 / $value2;
-    
-    echo $value3;
+    if ($_GET["value1Divide1x"] == "undefined" || $_GET["value2Divide1x"] == "undefined")  {
+        echo "Error";
+    } else {
+        (float)$value3 = $value1 / $value2;
+        
+        echo $value3;
+        $value1 = null;
+        $value2 = null;
+    }
 ?>
