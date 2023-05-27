@@ -15,9 +15,9 @@ body {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	font-family: Arial, Helvetica, sans-serif;
 	height: 100%;
 	width: 100%;
-	font-family: sans-serif;
 	background-color: #414040;
 	margin-top: 100px;
 	//   transform: translateX(50%);
@@ -53,14 +53,14 @@ body {
 			background-color: $color-btn-numb;
 
 			&:hover {
-				background-color: $color-btn-func;
+				background-color: $color-btn-func !important;
 			}
 		}
 		&-func {
 			background-color: $color-btn-func;
 
 			&:hover {
-				background-color: $color-btn-numb;
+				background-color: $color-btn-numb !important;
 			}
 		}
 		&-sum {
@@ -157,7 +157,6 @@ body {
 				}
 				&-MC,
 				&-MR,
-				&-MS,
 				&-M {
 					color: rgb(95, 95, 95);
 				}

@@ -30,15 +30,14 @@ let sum = document.getElementById('sum');
 const historyDisplay = document.getElementById('history-display');
 let isTrueOutput = true;
 let isTrueInput = false;
-// let isTrueC = false;
 let memoryArray = [];
 
 MC.disabled = true;
 MR.disabled = true;
-MS.disabled = true;
 M.disabled = true;
 
 function clearOutput(x) {
+	enableBtns();
 	if (outputParagraph.textContent == '0.') {
 		isTrueOutput = false;
 	}
@@ -50,10 +49,23 @@ function clearOutput(x) {
 		inputParagraph.textContent = '';
 		isTrueInput = false;
 	}
-	outputParagraph.textContent += x;
+	outputParagraph.style.fontSize = '4rem';
 
-	if (firstValue === undefined) firstValue = outputParagraph.textContent;
-	else secondValue = outputParagraph.textContent;
+	if (outputParagraph.textContent.length > 18) {
+		outputParagraph.style.fontSize = '3rem';
+		outputParagraph.textContent += '';
+	} else if (outputParagraph.textContent.length > 10) {
+		outputParagraph.style.fontSize = '3rem';
+		outputParagraph.textContent += x;
+	} else {
+		outputParagraph.textContent += x;
+	}
+
+	if (firstValue === undefined) {
+		firstValue = outputParagraph.textContent;
+	} else {
+		secondValue = outputParagraph.textContent;
+	}
 }
 
 function isZero(x) {
@@ -68,6 +80,10 @@ function blockDelete() {
 	outputParagraph.textContent += '';
 }
 
+function blockComma() {
+	outputParagraph.textContent += '';
+}
+
 function containsComma(x) {
 	if (x != undefined && x != null) {
 		return x.replace(',', '.');
@@ -76,14 +92,9 @@ function containsComma(x) {
 	}
 }
 
-// function addSpace(x) {
-// 	if (outputParagraph.textContent > 3) {
-// 		outputParagraph.textContent += ' ';
-// 	}
-// }
-// addSpace();
-
 function ce() {
+	enableBtns();
+	outputParagraph.style.fontSize = '4rem';
 	inputParagraph.textContent = '';
 	outputParagraph.textContent = '0';
 	isTrueOutput = true;
@@ -92,11 +103,16 @@ function ce() {
 }
 
 ceBtn.addEventListener('click', () => {
+	enableBtns();
+	outputParagraph.style.fontSize = '4rem';
 	outputParagraph.textContent = '0';
 	isTrueOutput = true;
+	// memoryAdd = [null, null];
 });
 
 cBtn.addEventListener('click', () => {
+	enableBtns();
+	outputParagraph.style.fontSize = '4rem';
 	inputParagraph.textContent = '';
 	outputParagraph.textContent = '0';
 	isTrueOutput = true;
@@ -107,8 +123,7 @@ cBtn.addEventListener('click', () => {
 });
 
 deleteBtn.addEventListener('click', () => {
-	if (!isTrueOutput) {
-		console.log(isTrueOutput);
+	if (!isTrueOutput && outputParagraph.textContent.length > 1) {
 		outputParagraph.textContent = outputParagraph.textContent.slice(0, -1);
 	}
 });
@@ -176,10 +191,12 @@ plus.addEventListener('click', () => {
 			isTrueOutput = true;
 			isTrueInput = true;
 			ceBtn.addEventListener('click', ce);
+			// comma.addEventListener('click', blockComma);
 			firstValue = undefined;
 			secondValue = undefined;
 		});
 	});
+	ceBtn.removeEventListener('click', ce);
 });
 
 minus.addEventListener('click', () => {
@@ -214,6 +231,7 @@ minus.addEventListener('click', () => {
 			secondValue = undefined;
 		});
 	});
+	ceBtn.removeEventListener('click', ce);
 });
 multiplication.addEventListener('click', () => {
 	memoryAdd = [null, null];
@@ -247,7 +265,86 @@ multiplication.addEventListener('click', () => {
 			secondValue = undefined;
 		});
 	});
+	ceBtn.removeEventListener('click', ce);
 });
+
+function disableBtns() {
+	outputParagraph.style.fontSize = '2.5rem';
+	percentBtn.style.backgroundColor = 'rgb(26, 25, 25)';
+	percentBtn.disabled = true;
+	divide1xBtn.style.backgroundColor = 'rgb(26, 25, 25)';
+	divide1xBtn.disabled = true;
+	pow.style.backgroundColor = 'rgb(26, 25, 25)';
+	pow.disabled = true;
+	sqrt.style.backgroundColor = 'rgb(26, 25, 25)';
+	sqrt.disabled = true;
+	divide.style.backgroundColor = 'rgb(26, 25, 25)';
+	divide.disabled = true;
+	multiplication.style.backgroundColor = 'rgb(26, 25, 25)';
+	multiplication.disabled = true;
+	minus.style.backgroundColor = 'rgb(26, 25, 25)';
+	minus.disabled = true;
+	plus.style.backgroundColor = 'rgb(26, 25, 25)';
+	plus.disabled = true;
+	plusMinus.style.backgroundColor = 'rgb(26, 25, 25)';
+	plusMinus.disabled = true;
+	comma.style.backgroundColor = 'rgb(26, 25, 25)';
+	comma.disabled = true;
+	deleteBtn.style.backgroundColor = 'rgb(26, 25, 25)';
+	deleteBtn.disabled = true;
+	MC.disabled = true;
+	MR.disabled = true;
+	MS.disabled = true;
+	M.disabled = true;
+	MPlus.disabled = true;
+	MMinus.disabled = true;
+	MC.style.color = 'rgb(95, 95, 95)';
+	MR.style.color = 'rgb(95, 95, 95)';
+	MS.style.color = 'rgb(95, 95, 95)';
+	M.style.color = 'rgb(95, 95, 95)';
+	MPlus.style.color = 'rgb(95, 95, 95)';
+	MMinus.style.color = 'rgb(95, 95, 95)';
+}
+
+function enableBtns() {
+	percentBtn.style.backgroundColor = 'rgba(50, 50, 50, 255)';
+	percentBtn.disabled = false;
+	divide1xBtn.style.backgroundColor = 'rgba(50, 50, 50, 255)';
+	divide1xBtn.disabled = false;
+	pow.style.backgroundColor = 'rgba(50, 50, 50, 255)';
+	pow.disabled = false;
+	sqrt.style.backgroundColor = 'rgba(50, 50, 50, 255)';
+	sqrt.disabled = false;
+	divide.style.backgroundColor = 'rgba(50, 50, 50, 255)';
+	divide.disabled = false;
+	multiplication.style.backgroundColor = 'rgba(50, 50, 50, 255)';
+	multiplication.disabled = false;
+	minus.style.backgroundColor = 'rgba(50, 50, 50, 255)';
+	minus.disabled = false;
+	plus.style.backgroundColor = 'rgba(50, 50, 50, 255)';
+	plus.disabled = false;
+	plusMinus.style.backgroundColor = 'rgba(59, 59, 59, 255)';
+	plusMinus.disabled = false;
+	comma.style.backgroundColor = 'rgba(59, 59, 59, 255)';
+	comma.disabled = false;
+	deleteBtn.style.backgroundColor = 'rgba(50, 50, 50, 255)';
+	deleteBtn.disabled = false;
+	MS.disabled = false;
+	MPlus.disabled = false;
+	MMinus.disabled = false;
+	MS.style.color = 'rgb(255, 255, 255)';
+	MPlus.style.color = 'rgb(255, 255, 255)';
+	MMinus.style.color = 'rgb(255, 255, 255)';
+
+	if (memoryArray.length > 0) {
+		MC.disabled = false;
+		MC.style.color = 'rgb(255, 255, 255)';
+		MR.disabled = false;
+		MR.style.color = 'rgb(255, 255, 255)';
+		M.disabled = false;
+		M.style.color = 'rgb(255, 255, 255)';
+	}
+}
 
 divide.addEventListener('click', () => {
 	memoryAdd = [null, null];
@@ -269,11 +366,16 @@ divide.addEventListener('click', () => {
 			if (outputParagraph.innerHTML == 'Error') {
 				inputParagraph.innerHTML = '';
 				outputParagraph.innerHTML = '0';
+			} else if (outputParagraph.innerHTML == 'Nie można dzielić przez 0') {
+				inputParagraph.textContent =
+					`${firstValue} ÷ ${secondValue} =`.replaceAll('.', ',');
+				disableBtns();
 			} else {
 				inputParagraph.textContent =
 					`${firstValue} ÷ ${secondValue} =`.replaceAll('.', ',');
 				memoryAdd[0] = outputParagraph.textContent;
 			}
+			// outputParagraph.style.fontSize = '4rem';
 			isTrueOutput = true;
 			isTrueInput = true;
 			ceBtn.addEventListener('click', ce);
@@ -281,6 +383,8 @@ divide.addEventListener('click', () => {
 			secondValue = undefined;
 		});
 	});
+	outputParagraph.style.fontSize = '4rem';
+	ceBtn.removeEventListener('click', ce);
 });
 
 sqrt.addEventListener('click', () => {
@@ -312,13 +416,20 @@ pow.addEventListener('click', () => {
 divide1xBtn.addEventListener('click', () => {
 	isTrueInput = false;
 	firstValue = 1;
-	inputParagraph.textContent = `1/(${outputParagraph.textContent})`;
 	secondValue = outputParagraph.textContent;
+	inputParagraph.textContent = `1/(${secondValue})`;
 	secondValue = containsComma(secondValue);
 	fetch(
 		`php/divide1x.php?value1Divide1x=${firstValue}&value2Divide1x=${secondValue}`
 	).then(async (result) => {
 		outputParagraph.innerHTML = (await result.text()).replace('.', ',');
+
+		if (outputParagraph.innerHTML == 'Error') {
+			inputParagraph.innerHTML = '';
+			outputParagraph.innerHTML = '0';
+		} else if (outputParagraph.innerHTML == 'Nie można dzielić przez 0') {
+			disableBtns();
+		}
 	});
 	isTrueOutput = true;
 	firstValue = undefined;
@@ -335,11 +446,9 @@ MPlus.addEventListener('click', () => {
 	}
 	MC.disabled = false;
 	MR.disabled = false;
-	MS.disabled = false;
 	M.disabled = false;
 	MC.style.color = 'white';
 	MR.style.color = 'white';
-	MS.style.color = 'white';
 	M.style.color = 'white';
 	isTrueOutput = true;
 });
@@ -354,11 +463,9 @@ MMinus.addEventListener('click', () => {
 	}
 	MC.disabled = false;
 	MR.disabled = false;
-	MS.disabled = false;
 	M.disabled = false;
 	MC.style.color = 'white';
 	MR.style.color = 'white';
-	MS.style.color = 'white';
 	M.style.color = 'white';
 	isTrueOutput = true;
 });
@@ -367,11 +474,9 @@ MC.addEventListener('click', () => {
 	memoryArray = [];
 	MC.disabled = true;
 	MR.disabled = true;
-	MS.disabled = true;
 	M.disabled = true;
 	MC.style.color = 'rgb(95, 95, 95)';
 	MR.style.color = 'rgb(95, 95, 95)';
-	MS.style.color = 'rgb(95, 95, 95)';
 	M.style.color = 'rgb(95, 95, 95)';
 	isTrueOutput = true;
 });
@@ -383,6 +488,12 @@ MR.addEventListener('click', () => {
 
 MS.addEventListener('click', () => {
 	memoryArray.push(parseFloat(outputParagraph.textContent));
+	MC.disabled = false;
+	MR.disabled = false;
+	M.disabled = false;
+	MC.style.color = 'white';
+	MR.style.color = 'white';
+	M.style.color = 'white';
 	isTrueOutput = true;
 });
 
@@ -392,7 +503,6 @@ M.addEventListener('click', () => {
 	historyDisplay.classList.toggle('visible');
 
 	for (let i = memoryArray.length - 1; i >= 0; i--) {
-		// console.log(memoryArray[i - 1]);
 		historyDisplay.appendChild(createMemoryList(memoryArray[i]));
 	}
 });
@@ -404,7 +514,9 @@ function createMemoryList(number) {
 }
 
 plusMinus.addEventListener('click', () => {
-	outputParagraph.textContent = parseFloat(outputParagraph.textContent) * -1;
+	let minusValue = outputParagraph.textContent;
+	minusValue = parseFloat(outputParagraph.textContent.replace(',', '.')) * -1;
+	outputParagraph.textContent = minusValue.toString().replace('.', ',');
 });
 
 comma.addEventListener('click', () => {
@@ -419,10 +531,11 @@ comma.addEventListener('click', () => {
 });
 
 sum.addEventListener('click', () => {
-	let value1Sum;
+	enableBtns();
+	outputParagraph.style.fontSize = '4rem';
 	isTrueInput = false;
-	value1Sum = outputParagraph.textContent;
-	inputParagraph.textContent = `${value1Sum} =`;
-	outputParagraph.textContent = `${value1Sum}`;
+	firstValue = outputParagraph.textContent;
+	inputParagraph.textContent = `${firstValue} =`;
+	outputParagraph.textContent = `${firstValue}`;
 	isTrueOutput = true;
 });
