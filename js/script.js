@@ -28,9 +28,12 @@ const comma = document.getElementById('comma');
 let sum = document.getElementById('sum');
 /** @var {HTMLElement} History panel, associated with memory down arrow button */
 const historyDisplay = document.getElementById('history-display');
+const historyBtn = document.getElementById('historyBtn');
+const historyDiv = document.getElementById('history-div');
 let isTrueOutput = true;
 let isTrueInput = false;
 let memoryArray = [];
+let historyArray = [];
 
 MC.disabled = true;
 MR.disabled = true;
@@ -38,7 +41,7 @@ M.disabled = true;
 
 function clearOutput(x) {
 	enableBtns();
-	if (outputParagraph.textContent == '0.') {
+	if (outputParagraph.textContent == '0,') {
 		isTrueOutput = false;
 	}
 	if (isTrueOutput) {
@@ -49,7 +52,7 @@ function clearOutput(x) {
 		inputParagraph.textContent = '';
 		isTrueInput = false;
 	}
-	outputParagraph.style.fontSize = '4rem';
+	// // outputParagraph.style.fontSize = '4rem';
 
 	if (outputParagraph.textContent.length > 18) {
 		outputParagraph.style.fontSize = '3rem';
@@ -58,6 +61,7 @@ function clearOutput(x) {
 		outputParagraph.style.fontSize = '3rem';
 		outputParagraph.textContent += x;
 	} else {
+		outputParagraph.style.fontSize = '4rem';
 		outputParagraph.textContent += x;
 	}
 
@@ -100,6 +104,11 @@ function ce() {
 	isTrueOutput = true;
 
 	memoryAdd = [null, null];
+}
+
+function commaAfterOperation() {
+	inputParagraph.textContent = '';
+	outputParagraph.textContent = '0,';
 }
 
 ceBtn.addEventListener('click', () => {
@@ -152,9 +161,23 @@ let secondValue;
 
 let memoryAdd = [null, null];
 
+comma.addEventListener('click', () => {
+	if (outputParagraph.textContent == '0') {
+		outputParagraph.textContent = '0,';
+	} else if (outputParagraph.textContent.includes(',')) {
+		outputParagraph.textContent += '';
+	} else {
+		outputParagraph.textContent += ',';
+	}
+	isTrueOutput = false;
+});
+
 percentBtn.addEventListener('click', () => {
 	if (firstValue !== undefined && secondValue !== undefined) {
-		const result = parseFloat(firstValue) * (parseFloat(secondValue) / 100);
+		// fetch(`php/percent.php?value1Percent=${secondValue}`).then(
+		// 	async (outcome) => {secondValue = outcome.text(); }
+		// );
+		const result = (parseFloat(firstValue) * parseFloat(secondValue)) / 100;
 		inputParagraph.innerHTML += ` ${result.toString().replace('.', ',')}`;
 		outputParagraph.innerHTML = result.toString().replace('.', ',');
 	} else if (firstValue !== undefined && secondValue === undefined) {
@@ -180,6 +203,9 @@ plus.addEventListener('click', () => {
 			`php/plus.php?value1Plus=${firstValue}&value2Plus=${secondValue}`
 		).then(async (result) => {
 			outputParagraph.innerHTML = (await result.text()).replace('.', ',');
+			historyArray.push(
+				`${firstValue} + ${secondValue} = ${outputParagraph.innerHTML}`
+			);
 			if (outputParagraph.innerHTML == 'Error') {
 				inputParagraph.innerHTML = '';
 				outputParagraph.innerHTML = '0';
@@ -191,12 +217,14 @@ plus.addEventListener('click', () => {
 			isTrueOutput = true;
 			isTrueInput = true;
 			ceBtn.addEventListener('click', ce);
-			// comma.addEventListener('click', blockComma);
+			comma.addEventListener('click', commaAfterOperation);
+
 			firstValue = undefined;
 			secondValue = undefined;
 		});
 	});
 	ceBtn.removeEventListener('click', ce);
+	comma.removeEventListener('click', commaAfterOperation);
 });
 
 minus.addEventListener('click', () => {
@@ -216,6 +244,9 @@ minus.addEventListener('click', () => {
 			`php/minus.php?value1Minus=${firstValue}&value2Minus=${secondValue}`
 		).then(async (result) => {
 			outputParagraph.innerHTML = (await result.text()).replace('.', ',');
+			historyArray.push(
+				`${firstValue} - ${secondValue} = ${outputParagraph.innerHTML}`
+			);
 			if (outputParagraph.innerHTML == 'Error') {
 				inputParagraph.innerHTML = '';
 				outputParagraph.innerHTML = '0';
@@ -227,11 +258,13 @@ minus.addEventListener('click', () => {
 			isTrueOutput = true;
 			isTrueInput = true;
 			ceBtn.addEventListener('click', ce);
+			comma.addEventListener('click', commaAfterOperation);
 			firstValue = undefined;
 			secondValue = undefined;
 		});
 	});
 	ceBtn.removeEventListener('click', ce);
+	comma.removeEventListener('click', commaAfterOperation);
 });
 multiplication.addEventListener('click', () => {
 	memoryAdd = [null, null];
@@ -250,6 +283,9 @@ multiplication.addEventListener('click', () => {
 			`php/multiplication.php?value1Multiplication=${firstValue}&value2Multiplication=${secondValue}`
 		).then(async (result) => {
 			outputParagraph.innerHTML = (await result.text()).replace('.', ',');
+			historyArray.push(
+				`${firstValue} x ${secondValue} = ${outputParagraph.innerHTML}`
+			);
 			if (outputParagraph.innerHTML == 'Error') {
 				inputParagraph.innerHTML = '';
 				outputParagraph.innerHTML = '0';
@@ -261,11 +297,13 @@ multiplication.addEventListener('click', () => {
 			isTrueOutput = true;
 			isTrueInput = true;
 			ceBtn.addEventListener('click', ce);
+			comma.addEventListener('click', commaAfterOperation);
 			firstValue = undefined;
 			secondValue = undefined;
 		});
 	});
 	ceBtn.removeEventListener('click', ce);
+	comma.removeEventListener('click', commaAfterOperation);
 });
 
 function disableBtns() {
@@ -307,6 +345,7 @@ function disableBtns() {
 }
 
 function enableBtns() {
+	outputParagraph.style.fontSize = '4rem';
 	percentBtn.style.backgroundColor = 'rgba(50, 50, 50, 255)';
 	percentBtn.disabled = false;
 	divide1xBtn.style.backgroundColor = 'rgba(50, 50, 50, 255)';
@@ -357,12 +396,16 @@ divide.addEventListener('click', () => {
 	resetSumButton();
 	sum.addEventListener('click', () => {
 		memoryOperation();
+		enableBtns();
 		firstValue = containsComma(firstValue);
 		secondValue = containsComma(secondValue);
 		fetch(
 			`php/divide.php?value1Divide=${firstValue}&value2Divide=${secondValue}`
 		).then(async (result) => {
 			outputParagraph.innerHTML = (await result.text()).replace('.', ',');
+			historyArray.push(
+				`${firstValue} ÷ ${secondValue} = ${outputParagraph.innerHTML}`
+			);
 			if (outputParagraph.innerHTML == 'Error') {
 				inputParagraph.innerHTML = '';
 				outputParagraph.innerHTML = '0';
@@ -375,25 +418,27 @@ divide.addEventListener('click', () => {
 					`${firstValue} ÷ ${secondValue} =`.replaceAll('.', ',');
 				memoryAdd[0] = outputParagraph.textContent;
 			}
-			// outputParagraph.style.fontSize = '4rem';
 			isTrueOutput = true;
 			isTrueInput = true;
 			ceBtn.addEventListener('click', ce);
+			comma.addEventListener('click', commaAfterOperation);
 			firstValue = undefined;
 			secondValue = undefined;
 		});
 	});
-	outputParagraph.style.fontSize = '4rem';
 	ceBtn.removeEventListener('click', ce);
+	comma.removeEventListener('click', commaAfterOperation);
 });
 
 sqrt.addEventListener('click', () => {
 	isTrueInput = false;
 	firstValue = outputParagraph.textContent;
+	let sqrtValue = firstValue;
 	inputParagraph.textContent = `√(${firstValue})`;
 	firstValue = containsComma(firstValue);
 	fetch(`php/sqrt.php?value1Sqrt=${firstValue}`).then(async (result) => {
 		outputParagraph.innerHTML = (await result.text()).replace('.', ',');
+		historyArray.push(`√(${sqrtValue}) = ${outputParagraph.innerHTML}`);
 	});
 	isTrueOutput = true;
 	firstValue = undefined;
@@ -403,10 +448,12 @@ sqrt.addEventListener('click', () => {
 pow.addEventListener('click', () => {
 	isTrueInput = false;
 	firstValue = outputParagraph.textContent;
+	let powValue = firstValue;
 	inputParagraph.textContent = `sqr(${firstValue})`;
 	firstValue = containsComma(firstValue);
 	fetch(`php/pow.php?value1Pow=${firstValue}`).then(async (result) => {
 		outputParagraph.innerHTML = (await result.text()).replace('.', ',');
+		historyArray.push(`sqr(${powValue}) = ${outputParagraph.innerHTML}`);
 	});
 	isTrueOutput = true;
 	firstValue = undefined;
@@ -417,13 +464,14 @@ divide1xBtn.addEventListener('click', () => {
 	isTrueInput = false;
 	firstValue = 1;
 	secondValue = outputParagraph.textContent;
+	let divide1xValue = secondValue;
 	inputParagraph.textContent = `1/(${secondValue})`;
 	secondValue = containsComma(secondValue);
 	fetch(
 		`php/divide1x.php?value1Divide1x=${firstValue}&value2Divide1x=${secondValue}`
 	).then(async (result) => {
 		outputParagraph.innerHTML = (await result.text()).replace('.', ',');
-
+		historyArray.push(`1/(${divide1xValue}) = ${outputParagraph.innerHTML}`);
 		if (outputParagraph.innerHTML == 'Error') {
 			inputParagraph.innerHTML = '';
 			outputParagraph.innerHTML = '0';
@@ -507,35 +555,43 @@ M.addEventListener('click', () => {
 	}
 });
 
+historyBtn.addEventListener('click', () => {
+	historyDiv.innerHTML = '';
+	historyDiv.classList.toggle('visible');
+
+	for (let i = historyArray.length - 1; i >= 0; i--) {
+		historyDiv.appendChild(createMemoryList(historyArray[i]));
+	}
+});
+
 function createMemoryList(number) {
 	let li = document.createElement('li');
 	li.textContent = number;
 	return li;
 }
-
 plusMinus.addEventListener('click', () => {
 	let minusValue = outputParagraph.textContent;
-	minusValue = parseFloat(outputParagraph.textContent.replace(',', '.')) * -1;
-	outputParagraph.textContent = minusValue.toString().replace('.', ',');
-});
 
-comma.addEventListener('click', () => {
-	if (outputParagraph.textContent == '') {
-		outputParagraph.textContent = '0,';
-	} else if (outputParagraph.textContent.includes(',')) {
-		outputParagraph.textContent += '';
+	if (
+		(firstValue != undefined && secondValue != undefined) ||
+		inputParagraph.textContent == ''
+	) {
+		minusValue = parseFloat(outputParagraph.textContent.replace(',', '.')) * -1;
+		outputParagraph.textContent = minusValue.toString().replace('.', ',');
 	} else {
-		outputParagraph.textContent += ',';
+		inputParagraph.textContent = `negate(${minusValue})`;
+		minusValue = parseFloat(outputParagraph.textContent.replace(',', '.')) * -1;
+		outputParagraph.textContent = minusValue.toString().replace('.', ',');
 	}
-	isTrueOutput = false;
 });
 
 sum.addEventListener('click', () => {
 	enableBtns();
-	outputParagraph.style.fontSize = '4rem';
 	isTrueInput = false;
 	firstValue = outputParagraph.textContent;
 	inputParagraph.textContent = `${firstValue} =`;
 	outputParagraph.textContent = `${firstValue}`;
+	historyArray.push(`${firstValue} = ${firstValue}`);
 	isTrueOutput = true;
+	firstValue = undefined;
 });

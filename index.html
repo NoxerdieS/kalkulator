@@ -22,10 +22,11 @@
 			<div class="calculator__display">
 				<div class="calculator__content">
 					<div class="calculator__content-history">
-						<button class="calculator__content-history-btn">
+						<button class="calculator__content-history-btn" id="historyBtn">
 							<i class="ti ti-history"></i>
 						</button>
 					</div>
+					
 					<div class="calculator__content-input">
 						<p
 							class="calculator__content-input-p"
@@ -180,14 +181,16 @@
 				>
 					0
 				</button>
-				<button class="calculator__btn calculator__btn-numb" id="comma">
-					,
+				<button class="calculator__btn calculator__btn-numb" id="comma">,
 				</button>
 				<button class="calculator__btn calculator__btn-sum" id="sum">
 					<i class="ti ti-equal"></i>
 				</button>
 				<ul class="calculator__history" id="history-display">
 					<li class="calculator__history-element"></li>
+				</ul>
+				<ul class="calculator__history calculator__history-display" id="history-div">
+					<li class="calculator__history-element">4321</li>
 				</ul>
 			</div>
 		</div>
